@@ -9,6 +9,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import jxl.Sheet;
+import jxl.Workbook;
 
 /**
  *
@@ -21,6 +27,7 @@ public class FrameLvq extends javax.swing.JFrame {
      */
     public FrameLvq() {
         initComponents();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("MS Excel Documents(*.xls, *.xlsx)", "xls", "xlsx"));
     }
 
     /**
@@ -33,40 +40,229 @@ public class FrameLvq extends javax.swing.JFrame {
     private void initComponents() {
 
         fileChooser = new javax.swing.JFileChooser();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        epohTextField = new javax.swing.JTextField();
+        learningRateTextField = new javax.swing.JTextField();
+        decLearningRtTextField = new javax.swing.JTextField();
+        minLearningRtTextField = new javax.swing.JTextField();
+        pilihDLatihButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        dataLatihTable = new javax.swing.JTable();
+        trainButton = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel6 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        jProgressBar1 = new javax.swing.JProgressBar();
 
+        fileChooser.setCurrentDirectory(new java.io.File("C:\\Users\\ACER\\Documents\\NetBeansProjects\\LVQ_Backpro"));
         fileChooser.setDialogTitle("Pilih Data");
-        fileChooser.setFileFilter(new MyCustomFilter());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("LVQ Pelatihan");
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setText("PELATIHAN LVQ");
+
+        jLabel2.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel2.setText("Banyak Epoh");
+
+        jLabel3.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel3.setText("Learning Rate");
+
+        jLabel4.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel4.setText("Pengurangan Learning Rate");
+
+        jLabel5.setFont(new java.awt.Font("Calibri", 1, 14)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel5.setText("Minimum Learning Rate ");
+
+        epohTextField.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        epohTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                epohTextFieldActionPerformed(evt);
+            }
+        });
+
+        learningRateTextField.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+
+        decLearningRtTextField.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+
+        minLearningRtTextField.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+
+        pilihDLatihButton.setText("Pilih Data");
+        pilihDLatihButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pilihDLatihButtonActionPerformed(evt);
+            }
+        });
+
+        dataLatihTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        dataLatihTable.setEnabled(false);
+        jScrollPane1.setViewportView(dataLatihTable);
+
+        trainButton.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        trainButton.setForeground(new java.awt.Color(51, 255, 51));
+        trainButton.setText("Latih");
+        trainButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                trainButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setText("Data Latih");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pilihDLatihButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSeparator1)
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 498, Short.MAX_VALUE)
+                                .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(61, 61, 61)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(decLearningRtTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(learningRateTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(epohTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(minLearningRtTextField))))
+                        .addGap(33, 33, 33))
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pilihDLatihButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(epohTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(learningRateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(decLearningRtTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(minLearningRtTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17)
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(416, 336));
+        setSize(new java.awt.Dimension(756, 695));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    class MyCustomFilter extends javax.swing.filechooser.FileFilter {
+    private void pilihDLatihButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pilihDLatihButtonActionPerformed
+        // TODO add your handling code here:
+        int returnVal = fileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            excelFile = fileChooser.getSelectedFile();
+            try {
+                // Tampikan data
+                muatData(excelFile);
 
-        @Override
-        public boolean accept(File file) {
-            // Allow only directories, or files with ".txt" extension
-            return file.isDirectory() || file.getAbsolutePath().endsWith(".txt");
+            } catch (Exception ex) {
+                System.out.println("Terdapat masalah dalam akses file " + excelFile.getAbsolutePath());
+            }
+        } else {
+            System.out.println("Akses file dibatalkan");
         }
 
-        @Override
-        public String getDescription() {
-            // This description will be displayed in the dialog,
-            // hard-coded = ugly, should be done via I18N
-            return "Text documents ADI(*.txt)";
+    }//GEN-LAST:event_pilihDLatihButtonActionPerformed
+
+    private void trainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trainButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_trainButtonActionPerformed
+
+    private void epohTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_epohTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_epohTextFieldActionPerformed
+
+    private void muatData(File file) {
+        File excelFile = file;
+
+        // buat model untuk file excel
+        if (excelFile.exists()) {
+            try {
+                Workbook workbook = Workbook.getWorkbook(excelFile);
+                Sheet sheet = workbook.getSheets()[0];
+
+                TableModel model = new DefaultTableModel(sheet.getRows(), sheet.getColumns());
+                for (int row = 0; row < sheet.getRows(); row++) {
+                    for (int column = 0; column < sheet.getColumns(); column++) {
+                        String content = sheet.getCell(column, row).getContents();
+                        model.setValueAt(content, row, column);
+                    }
+                }
+
+                dataLatihTable.setModel(model);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error: " + e);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "File does not exist");
         }
     }
 
@@ -105,8 +301,28 @@ public class FrameLvq extends javax.swing.JFrame {
         });
     }
 
+    File excelFile = null;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable dataLatihTable;
+    private javax.swing.JTextField decLearningRtTextField;
+    private javax.swing.JTextField epohTextField;
     private javax.swing.JFileChooser fileChooser;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTextField learningRateTextField;
+    private javax.swing.JTextField minLearningRtTextField;
+    private javax.swing.JButton pilihDLatihButton;
+    private javax.swing.JButton trainButton;
     // End of variables declaration//GEN-END:variables
 
 }

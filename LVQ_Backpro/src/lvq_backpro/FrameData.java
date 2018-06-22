@@ -141,7 +141,8 @@ public class FrameData extends javax.swing.JFrame {
                 FrameDepan.s += string;
             }
             System.out.println(FrameDepan.s);
-            System.out.println(excelFile);
+            System.out.println(excelFile.toString());
+            FrameDepan.data.setInputFile(excelFile.toString());
             this.dispose();
         }
 

@@ -120,23 +120,17 @@ public class FrameDepan extends javax.swing.JFrame {
 
     private void backproActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backproActionPerformed
         // TODO add your handling code here:
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new FrameBackpro().setVisible(true);
-
-            }
-        });
+        FrameBackpro frBackpro = new FrameBackpro();
+        frBackpro.setVisible(true);
+        System.out.println("Frame Backpro");
     }//GEN-LAST:event_backproActionPerformed
 
     private void lvqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lvqActionPerformed
         // TODO add your handling code here:
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new FrameLvq().setVisible(true);
-            }
-        });
+        FrameLvq frLVQ = new FrameLvq();
+        frLVQ.setVisible(true);
+        System.out.println("Frame LVQ");
+        
     }//GEN-LAST:event_lvqActionPerformed
 
     /**

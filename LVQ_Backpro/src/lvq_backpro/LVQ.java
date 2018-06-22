@@ -29,7 +29,7 @@ public class LVQ {
             d.normalisasi();
             int banyakFitur = d.namaAtribut.length - 1;
             int banyakKlas = (int) d.getDataTertinggi()[d.data[0].length - 1] + 1;
-            System.out.println(banyakFitur + " " + banyakKlas);
+            // System.out.println(banyakFitur + " " + banyakKlas);
             bobot = new double[banyakKlas][banyakFitur];
             inisialisasiBobotAwal();
 
@@ -57,6 +57,8 @@ public class LVQ {
     }
 
     public void train(DataManagement d, int maxEpoh, double learningRate, double decLearningRate, double minLearningRate) {
+        //Normalisasi Data
+        d.normalisasi();
         //inisialisasi data latih
         double[][] dataLatih = new double[d.data.length - 1][d.namaAtribut.length - 1];
         //System.out.println(dataLatih.length +"  "+ dataLatih[0].length);
@@ -108,6 +110,8 @@ public class LVQ {
     }
 
     public void test(DataManagement d) {
+        //Normalisasi Data
+        d.normalisasi();
         //inisialisasi data latih
         double[][] dataUji = new double[d.data.length - 1][d.namaAtribut.length - 1];
         //System.out.println(dataLatih.length +"  "+ dataLatih[0].length);
@@ -129,12 +133,12 @@ public class LVQ {
                 jarakThdKlas[j] = hitungJarakEuclidean(dataUji[i], bobot[j]);
                 //System.out.println(jarakThdKlas[j]);
             }
-            
+
             int klasTerdekat = cariKlasTerdekat(jarakThdKlas);
             if (klasTerdekat != dataTarget[i]) {
                 error++;
             }
-            System.out.println(klasTerdekat + "  " +dataTarget[i]);
+            System.out.println(klasTerdekat + "  " + dataTarget[i]);
 
         }
         System.out.println("error = " + error);
@@ -162,6 +166,21 @@ public class LVQ {
 
     public static void main(String[] args) {
         LVQ lvq = new LVQ();
+
+        DataManagement dataL = new DataManagement();
+        dataL.setInputFile("DataLatih2.xls");
+        DataManagement dataUji = new DataManagement();
+        //dataUji.setInputFile("DataUji2.xls");
+        dataUji.setInputFile("DataLatih2Copy.xls");
+        
+                
+        try {
+            dataL.read2();
+            dataUji.read2();
+        } catch (IOException ex) {
+            Logger.getLogger(LVQ.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         for (int i = 0; i < lvq.bobot.length; i++) {
             System.out.println("bobotMenujuKlas-" + i);
             for (int j = 0; j < lvq.bobot[i].length; j++) {
@@ -170,7 +189,7 @@ public class LVQ {
             System.out.println("");
         }
 
-        lvq.train(lvq.d, 1000, 0.1, 0.01, 0.0005);
+        lvq.train(dataL, 100, 0.1, 0.01, 0.0005);
 
         System.out.println("Setelah di latih");
         for (int i = 0; i < lvq.bobot.length; i++) {
@@ -180,8 +199,9 @@ public class LVQ {
             }
             System.out.println("");
         }
-        
-        lvq.test(lvq.d);
+
+        lvq.test(dataUji);
+        int i = 1;
 
         /*
          for (int i = 0; i < lvq.bobot.length; i++) {

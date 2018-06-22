@@ -39,8 +39,8 @@ public class DataManagement {
 
     public double data[][];
     public String namaAtribut[];
-    private double dataTertinggi[];
-    private double dataTerendah[];
+    private static double dataTertinggi[];
+    private static double dataTerendah[];
     private String inputFile;
     private String outputFile;
 
@@ -132,6 +132,43 @@ public class DataManagement {
         sheet.addCell(label);
     }
 
+    //Read Tanpa set nilai max dan min
+    public void read2() throws IOException {
+        File inputWorkbook = new File(inputFile);
+        Workbook w;
+        try {
+            w = Workbook.getWorkbook(inputWorkbook);
+            // Get the first sheet
+            Sheet sheet = w.getSheet(0);
+
+            namaAtribut = new String[sheet.getColumns()];
+
+            //Catatan baris ke-0 dianggap tak digunakan
+            data = new double[sheet.getRows()][sheet.getColumns()];
+
+            // Loop over first 10 column and lines
+            for (int j = 0; j < sheet.getColumns(); j++) {
+
+                for (int i = 0; i < sheet.getRows(); i++) {
+                    Cell cell = sheet.getCell(j, i);
+                    CellType type = cell.getType();
+                    if (type == CellType.LABEL) {
+                        namaAtribut[j] = cell.getContents();
+                    }
+                    if (type == CellType.NUMBER) {
+                        data[i][j] = Double.parseDouble(cell.getContents());
+
+                    }
+
+                }
+            }
+
+        } catch (BiffException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void read() throws IOException {
 
         File inputWorkbook = new File(inputFile);
@@ -210,7 +247,7 @@ public class DataManagement {
 
     public static void main(String[] args) throws IOException, WriteException {
         DataManagement test = new DataManagement();
-        test.setInputFile("DataLatih.xls");
+        test.setInputFile("C:\\Users\\ACER\\Documents\\NetBeansProjects\\LVQ_Backpro\\DataLatih.xls");
         test.setOutputFile("Data Ternormalisasi.xls");
         test.read();
 
@@ -239,6 +276,23 @@ public class DataManagement {
 
         test.normalisasi();
         System.out.println("Data Ternormalisasi");
+        for (String namaAtribut : test.namaAtribut) {
+            System.out.format("%-24s", namaAtribut);
+        }
+        System.out.println();
+
+        for (int i = 1; i < test.data.length; i++) {
+            for (int j = 0; j < test.data[i].length; j++) {
+                System.out.format("%-24.3f", test.data[i][j]);
+            }
+
+            System.out.println();
+        }
+        
+        System.out.println("\n");
+
+        test.normalisasi();
+        System.out.println("Data Ternormalisasi 2");
         for (String namaAtribut : test.namaAtribut) {
             System.out.format("%-24s", namaAtribut);
         }
