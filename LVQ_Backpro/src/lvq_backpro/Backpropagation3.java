@@ -20,13 +20,19 @@ public class Backpropagation3 {
 
     DataManagement d;
     ArrayList<double[][]> bobot;
+    public int fungsiAktivasi;
     int[] banyakLDanNeuron;
+    ArrayList<Double> logRMSE;
+    ArrayList<Integer> logError;
+    double[][] hasil;
+    double error;
+    double akurasi;
 
-    public Backpropagation3(int[] nLnN) {
+    public Backpropagation3(int[] nLnN, String path) {
         d = new DataManagement();
         bobot = new ArrayList<>();
         banyakLDanNeuron = nLnN;
-        d.setInputFile("DataLatih.xls");
+        d.setInputFile(path);
         try {
             d.read();
             d.normalisasi();
@@ -56,6 +62,8 @@ public class Backpropagation3 {
     }
 
     public void train(DataManagement d, int maxEpoh, double learningRate, double targetError) {
+        //Normalisasi Data
+        d.normalisasi();
         //inisialisasi data latih
         double[][] dataLatih = new double[d.data.length - 1][d.namaAtribut.length];
         //System.out.println(dataLatih.length + "  " + dataLatih[0].length);
@@ -77,16 +85,20 @@ public class Backpropagation3 {
             // System.out.println(dataTarget[i]);
         }
 
+        logError = new ArrayList<>();
+        logRMSE = new ArrayList<>();
+
         /*Proses Pelatihan*/
         double rmse = 1;
         int epoh = 0;
+        int errorPerEpoh;
         while (epoh < maxEpoh && rmse > targetError) {
             double totalError = 0;
+            errorPerEpoh = 0;
             for (int i = 0; i < dataLatih.length; i++) {
                 ArrayList<double[]> signalInPerNeuron = new ArrayList<>();
                 ArrayList<double[]> signalOutPerNeuron = new ArrayList<>();
                 double error = 0;
-
                 /*Langkah Maju*/
                 for (int j = 0; j < bobot.size(); j++) {
                     double[] signalIn;
@@ -103,14 +115,14 @@ public class Backpropagation3 {
                         for (int l = 0; l < bobot.get(j)[k].length; l++) {
                             if (j == 0) {
                                 signalIn[k] = hitungSignal(dataLatih[i], bobot.get(j)[k]);
-                                signalOut[k] = fungsiAktivasi(signalIn[k], 0);
+                                signalOut[k] = fungsiAktivasi(signalIn[k], fungsiAktivasi);
                             } else if (j == bobot.size() - 1) {
                                 //untuk output layer
                                 signalIn[k] = hitungSignal(signalOutPerNeuron.get(j - 1), bobot.get(j)[k]);
                                 signalOut[k] = fungsiAktivasi(signalIn[k], 2);
                             } else {
                                 signalIn[k] = hitungSignal(signalOutPerNeuron.get(j - 1), bobot.get(j)[k]);
-                                signalOut[k] = fungsiAktivasi(signalIn[k], 0);
+                                signalOut[k] = fungsiAktivasi(signalIn[k], fungsiAktivasi);
                             }
                         }
                         if (j != bobot.size() - 1) {
@@ -181,7 +193,7 @@ public class Backpropagation3 {
                             } else if (j == 0) {
                                 e = hitungSignal(deltaIn.get(signalOutPerNeuron.size() - 2 - j), bobotMundur.get(signalInPerNeuron.size() - 2 - j)[k]);
 
-                                infError[k] = e * fungsiTurunan(signalInPerNeuron.get(j)[k], 0);
+                                infError[k] = e * fungsiTurunan(signalInPerNeuron.get(j)[k], fungsiAktivasi);
                                 korBot[l] = learningRate * infError[k] * dataLatih[i][l];
 
                             } else {
@@ -189,7 +201,7 @@ public class Backpropagation3 {
 //                                System.out.println("bobot - " + bobotMundur.get(signalInPerNeuron.size() - 2 - j)[k].length);
                                 e = hitungSignal(deltaIn.get(signalOutPerNeuron.size() - 2 - j), bobotMundur.get(signalInPerNeuron.size() - 2 - j)[k]);
 
-                                infError[k] = e * fungsiTurunan(signalInPerNeuron.get(j)[k], 0);
+                                infError[k] = e * fungsiTurunan(signalInPerNeuron.get(j)[k], fungsiAktivasi);
 //                                System.out.println(infError[k]);
                                 korBot[l] = learningRate * infError[k] * signalOutPerNeuron.get(j - 1)[l];
 
@@ -202,15 +214,18 @@ public class Backpropagation3 {
                     }
                     deltaIn.add(infError);
                 }
+                if (e != 0) {
+                    errorPerEpoh++;
+                }
 
 //                System.out.println("");
-                for (int j = 0; j < koreksiBobotperNeuron.size(); j++) {
-//                    System.out.println("N " + j);
-                    for (int k = 0; k < koreksiBobotperNeuron.get(j).length; k++) {
-//                        System.out.println(koreksiBobotperNeuron.get(j)[k]);
-                    }
-
-                }
+//                for (int j = 0; j < koreksiBobotperNeuron.size(); j++) {
+////                    System.out.println("N " + j);
+//                    for (int k = 0; k < koreksiBobotperNeuron.get(j).length; k++) {
+////                        System.out.println(koreksiBobotperNeuron.get(j)[k]);
+//                    }
+//
+//                }
                 /*Perbarui Bobot*/
                 int count = koreksiBobotperNeuron.size() - 1;
                 for (int j = 0; j < bobot.size(); j++) {
@@ -231,14 +246,19 @@ public class Backpropagation3 {
             totalError = totalError / dataLatih.length;
             //System.out.println(totalError);
             rmse = Math.sqrt(totalError);
+            logRMSE.add(rmse);
             System.out.println("RMSE = " + rmse);
+            System.out.println("Errorper Epoh = " + errorPerEpoh);
+            logError.add(errorPerEpoh);
             epoh++;
         }
 
     }
 
     public void test(DataManagement d) {
-        //inisialisasi data latih
+        //Normalisasi Data
+        d.normalisasi();
+        //inisialisasi data uji
         double[][] dataUji = new double[d.data.length - 1][d.namaAtribut.length];
         //System.out.println(dataLatih.length + "  " + dataLatih[0].length);
         for (int i = 0; i < dataUji.length; i++) {
@@ -259,17 +279,20 @@ public class Backpropagation3 {
             // System.out.println(dataTarget[i]);
         }
 
-        /*Proses Pelatihan*/
+        this.hasil = new double[dataUji.length][2];
+        this.hasil[0] = dataTarget;
+        /*Proses Pengujian*/
         double rmse = 1;
         int epoh = 0;
         double[] nilai = new double[dataUji.length];
         double[] prediksi = new double[dataUji.length];
 
         double totalError = 0;
+        int error = 0;
         for (int i = 0; i < dataUji.length; i++) {
             ArrayList<double[]> signalInPerNeuron = new ArrayList<>();
             ArrayList<double[]> signalOutPerNeuron = new ArrayList<>();
-            double error = 0;
+            
 
             /*Langkah Maju*/
             for (int j = 0; j < bobot.size(); j++) {
@@ -287,7 +310,7 @@ public class Backpropagation3 {
                     for (int l = 0; l < bobot.get(j)[k].length; l++) {
                         if (j == 0) {
                             signalIn[k] = hitungSignal(dataUji[i], bobot.get(j)[k]);
-                            signalOut[k] = fungsiAktivasi(signalIn[k], 0);
+                            signalOut[k] = fungsiAktivasi(signalIn[k], fungsiAktivasi);
                         } else if (j == bobot.size() - 1) {
                             //untuk output layer
                             signalIn[k] = hitungSignal(signalOutPerNeuron.get(j - 1), bobot.get(j)[k]);
@@ -297,7 +320,7 @@ public class Backpropagation3 {
                             prediksi[i] = signalOut[k];
                         } else {
                             signalIn[k] = hitungSignal(signalOutPerNeuron.get(j - 1), bobot.get(j)[k]);
-                            signalOut[k] = fungsiAktivasi(signalIn[k], 0);
+                            signalOut[k] = fungsiAktivasi(signalIn[k], fungsiAktivasi);
                         }
                     }
                     if (j != bobot.size() - 1) {
@@ -314,13 +337,22 @@ public class Backpropagation3 {
                 signalOutPerNeuron.add(signalOut);
                 //System.out.println("  " + signalInPerNeuron.size());
             }
-
+            if (prediksi[i] != dataTarget[i]) {
+                 error++;
+            }
         }
+        
         for (int i = 0; i < prediksi.length; i++) {
             System.out.println("nilai In = " + nilai[i]);
             System.out.println("Hasil Prediksi data-" + (i + 1) + " = " + prediksi[i]);
             System.out.println("");
         }
+        System.out.println("Error = " + error);
+        this.error = error;
+        this.akurasi = (dataTarget.length - this.error)/dataTarget.length * 100;
+        System.out.println("Akurasi =" + akurasi);
+        this.hasil[1] = prediksi;
+        
 
     }
 
@@ -382,9 +414,22 @@ public class Backpropagation3 {
     }
 
     public static void main(String[] args) {
-        //int[] nHnN = {5, 1};
+        //int[] nHnN = {5, 4, 1};
         int[] nHnN = {3, 1};
-        Backpropagation3 b = new Backpropagation3(nHnN);
+        Backpropagation3 b = new Backpropagation3(nHnN, "DataLatih.xls");
+
+        DataManagement dataL = new DataManagement();
+        dataL.setInputFile("DataLatih2.xls");
+        DataManagement dataUji = new DataManagement();
+        //dataUji.setInputFile("DataUji2.xls");
+        dataUji.setInputFile("DataLatih2Copy.xls");
+
+        try {
+            dataL.read2();
+            dataUji.read2();
+        } catch (IOException ex) {
+            Logger.getLogger(LVQ.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         //print jaringgan
         for (int i = 0; i < b.bobot.size(); i++) {
@@ -398,13 +443,15 @@ public class Backpropagation3 {
             System.out.println("");
         }
 
-        //train
-        b.train(b.d, 100, 0.5, 0.1);
-        
-         //b.train(b.d, 100, 0.5, 0.004);
+        //Pilih Fungsi Aktivasi
+        b.fungsiAktivasi = 1;
 
+        //train
+        b.train(dataL, 100, 0.5, 0.1);
+
+        //b.train(b.d, 100, 0.5, 0.004);
         System.out.println("\nTesting");
-        b.test(b.d);
+        b.test(dataUji);
 
         //print jaringgan
 //        System.out.println("Bobot baru");

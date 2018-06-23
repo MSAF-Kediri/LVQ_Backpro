@@ -6,6 +6,7 @@
 package lvq_backpro;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import java.util.Random;
 import java.util.logging.Level;
@@ -19,11 +20,15 @@ import java.util.logging.Logger;
 public class LVQ {
 
     double[][] bobot;
+    double error;
+    double akurasi;
+    double[][] hasil;
+    ArrayList<Integer> logErrorPelatihan;
     DataManagement d;
 
-    public LVQ() {
+    public LVQ(String path) {
         d = new DataManagement();
-        d.setInputFile("DataLatih.xls");
+        d.setInputFile(path);
         try {
             d.read();
             d.normalisasi();
@@ -37,6 +42,12 @@ public class LVQ {
             Logger.getLogger(LVQ.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public void setPathData(String path) {
+        this.d.setInputFile(path);
+    }
+    
+    
 
     private void inisialisasiBobotAwal() {
         Random r = new Random();
@@ -57,8 +68,8 @@ public class LVQ {
     }
 
     public void train(DataManagement d, int maxEpoh, double learningRate, double decLearningRate, double minLearningRate) {
-        //Normalisasi Data
-        d.normalisasi();
+//        //Normalisasi Data
+//        d.normalisasi();
         //inisialisasi data latih
         double[][] dataLatih = new double[d.data.length - 1][d.namaAtribut.length - 1];
         //System.out.println(dataLatih.length +"  "+ dataLatih[0].length);
@@ -72,6 +83,8 @@ public class LVQ {
         for (int i = 0; i < dataTarget.length; i++) {
             dataTarget[i] = d.data[i + 1][d.namaAtribut.length - 1];
         }
+        
+        logErrorPelatihan = new ArrayList<>();
 
         /*Proses Pelatihan*/
         int error;
@@ -101,17 +114,19 @@ public class LVQ {
 
             }
             System.out.println("Epoh" + (epoh + 1) + "\n  Error = " + error);
+            logErrorPelatihan.add(error);
             System.out.println("  learningRate = " + learningRate);
             learningRate = learningRate - (learningRate * decLearningRate);
             System.out.println(learningRate);
             epoh++;
         }
+      
 
     }
 
     public void test(DataManagement d) {
-        //Normalisasi Data
-        d.normalisasi();
+//        //Normalisasi Data
+//        d.normalisasi();
         //inisialisasi data latih
         double[][] dataUji = new double[d.data.length - 1][d.namaAtribut.length - 1];
         //System.out.println(dataLatih.length +"  "+ dataLatih[0].length);
@@ -120,6 +135,7 @@ public class LVQ {
                 dataUji[i][j] = d.data[i + 1][j];
             }
         }
+        this.hasil = new double[dataUji.length][2];
         //inisialisasi target
         double[] dataTarget = new double[d.data.length - 1];
         for (int i = 0; i < dataTarget.length; i++) {
@@ -138,10 +154,13 @@ public class LVQ {
             if (klasTerdekat != dataTarget[i]) {
                 error++;
             }
-            System.out.println(klasTerdekat + "  " + dataTarget[i]);
-
+            System.out.println(dataTarget[i] + "  " + klasTerdekat);
+            this.hasil[i][0] = dataTarget[i];
+            this.hasil[i][1] = klasTerdekat;
         }
         System.out.println("error = " + error);
+        this.error = error;
+        this.akurasi = (dataUji.length-this.error)/dataUji.length * 100;
     }
 
     private int cariKlasTerdekat(double[] d) {
@@ -165,18 +184,19 @@ public class LVQ {
     }
 
     public static void main(String[] args) {
-        LVQ lvq = new LVQ();
+        LVQ lvq = new LVQ("DataLatih.xls");
 
         DataManagement dataL = new DataManagement();
         dataL.setInputFile("DataLatih2.xls");
         DataManagement dataUji = new DataManagement();
         //dataUji.setInputFile("DataUji2.xls");
         dataUji.setInputFile("DataLatih2Copy.xls");
-        
-                
+
         try {
             dataL.read2();
+            dataL.normalisasi();
             dataUji.read2();
+            dataUji.normalisasi();
         } catch (IOException ex) {
             Logger.getLogger(LVQ.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -201,6 +221,7 @@ public class LVQ {
         }
 
         lvq.test(dataUji);
+        System.out.println("Akurasi = " + lvq.akurasi);
         int i = 1;
 
         /*

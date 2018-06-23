@@ -122,6 +122,7 @@ public class FrameDepan extends javax.swing.JFrame {
         // TODO add your handling code here:
         FrameBackpro frBackpro = new FrameBackpro();
         frBackpro.setVisible(true);
+        frBackpro.frDepan = this;
         System.out.println("Frame Backpro");
     }//GEN-LAST:event_backproActionPerformed
 
@@ -129,6 +130,7 @@ public class FrameDepan extends javax.swing.JFrame {
         // TODO add your handling code here:
         FrameLvq frLVQ = new FrameLvq();
         frLVQ.setVisible(true);
+        frLVQ.frDepan = this;
         System.out.println("Frame LVQ");
         
     }//GEN-LAST:event_lvqActionPerformed
@@ -171,6 +173,7 @@ public class FrameDepan extends javax.swing.JFrame {
     //Variables
     public static DataManagement data = new DataManagement();
     public static String s;
+    public static String path;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backpro;

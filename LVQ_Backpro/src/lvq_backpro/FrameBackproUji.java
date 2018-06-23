@@ -13,17 +13,18 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import jxl.Sheet;
 import jxl.Workbook;
+import sun.swing.BakedArrayList;
 
 /**
  *
  * @author ACER
  */
-public class FrameLvqUji extends javax.swing.JFrame {
+public class FrameBackproUji extends javax.swing.JFrame {
 
     /**
      * Creates new form FrameLvqUji
      */
-    public FrameLvqUji() {
+    public FrameBackproUji() {
         initComponents();
         fileChooser.setFileFilter(new FileNameExtensionFilter("MS Excel Documents(*.xls, *.xlsx)", "xls", "xlsx"));
     }
@@ -57,10 +58,10 @@ public class FrameLvqUji extends javax.swing.JFrame {
         fileChooser.setDialogTitle("Pilih Data Uji");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("LVQ Pengujian");
+        setTitle("Backpropagation Pengujian");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Pengujian LVQ");
+        jLabel1.setText("Pengujian Backpropagation");
 
         pilihDataButton.setText("Pilih Data Uji");
         pilihDataButton.addActionListener(new java.awt.event.ActionListener() {
@@ -220,28 +221,22 @@ public class FrameLvqUji extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             //testing data
-            lvq.test(dataUji);
-            TableModel model = new DefaultTableModel(lvq.hasil.length + 1, 3);
-            for (int i = 0; i < model.getRowCount(); i++) {
-                for (int j = 0; j < model.getColumnCount(); j++) {
-                    if (i == 0) {
-                        model.setValueAt("No", i, 0);
-                        model.setValueAt("Data Aktual", i, 1);
-                        model.setValueAt("Hasil Prediksi", i, 2);
-                    } else {
-                        if (j == 0) {
-                            model.setValueAt(i, i, 0);
-                        } else {
-                            model.setValueAt(lvq.hasil[i - 1][j - 1], i, j);
-                        }
+            backpro.test(dataUji);
+            TableModel model = new DefaultTableModel(backpro.hasil.length + 1, 3);
+            model.setValueAt("No", 0, 0);
+            model.setValueAt("Data Aktual", 0, 1);
+            model.setValueAt("Hasil Prediksi", 0, 2);
 
-                    }
+            for (int j = 1; j < model.getRowCount(); j++) {
+                model.setValueAt(j, j, 0);
+                model.setValueAt(backpro.hasil[0][j-1], j, 1);
+                model.setValueAt(backpro.hasil[1][j-1], j, 2);
 
-                }
             }
+
             hasilTable.setModel(model);
-            errorTextField.setText(String.valueOf(lvq.error));
-            akurasiTextField.setText(String.valueOf(lvq.akurasi));
+            errorTextField.setText(String.valueOf(backpro.error));
+            akurasiTextField.setText(String.valueOf(backpro.akurasi));
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -291,27 +286,27 @@ public class FrameLvqUji extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrameLvqUji.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrameBackproUji.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrameLvqUji.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrameBackproUji.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrameLvqUji.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrameBackproUji.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrameLvqUji.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrameBackproUji.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrameLvqUji().setVisible(true);
+                new FrameBackproUji().setVisible(true);
             }
         });
     }
 
     //Variables
     File excelFile = null;
-    LVQ lvq;
+    Backpropagation3 backpro;
     String path;
     DataManagement dataUji;
 

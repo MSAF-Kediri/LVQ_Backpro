@@ -8,6 +8,8 @@ package lvq_backpro;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -32,7 +34,7 @@ public class FrameData extends javax.swing.JFrame {
         initComponents();
         //fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
         fileChooser.setFileFilter(new FileNameExtensionFilter("MS Excel Documents(*.xls, *.xlsx)", "xls", "xlsx"));
-
+        
     }
 
     /**
@@ -142,7 +144,13 @@ public class FrameData extends javax.swing.JFrame {
             }
             System.out.println(FrameDepan.s);
             System.out.println(excelFile.toString());
+            FrameDepan.path = excelFile.toString();
             FrameDepan.data.setInputFile(excelFile.toString());
+            try {
+                FrameDepan.data.read();
+            } catch (IOException ex) {
+                Logger.getLogger(FrameData.class.getName()).log(Level.SEVERE, null, ex);
+            }
             this.dispose();
         }
 

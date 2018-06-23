@@ -241,9 +241,15 @@ public class DataManagement {
         }
     }
 
-    public double[] getDataTertinggi() {
+    public static double[] getDataTertinggi() {
         return dataTertinggi;
     }
+
+    public static double[] getDataTerendah() {
+        return dataTerendah;
+    }
+    
+    
 
     public static void main(String[] args) throws IOException, WriteException {
         DataManagement test = new DataManagement();
@@ -289,6 +295,7 @@ public class DataManagement {
             System.out.println();
         }
         
+        test.write();
         System.out.println("\n");
 
         test.normalisasi();
@@ -306,7 +313,7 @@ public class DataManagement {
             System.out.println();
         }
 
-        test.write();
+        
         /* double[] d = test.sortingAtributKe(1);
          for (int i = 0; i < d.length; i++) {
          System.out.println(d[i]);

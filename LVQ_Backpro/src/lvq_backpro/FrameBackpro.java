@@ -9,6 +9,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import jxl.Sheet;
+import jxl.Workbook;
 
 /**
  *
@@ -21,6 +28,8 @@ public class FrameBackpro extends javax.swing.JFrame {
      */
     public FrameBackpro() {
         initComponents();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("MS Excel Documents(*.xls, *.xlsx)", "xls", "xlsx"));
+        path = FrameDepan.path;
     }
 
     /**
@@ -33,26 +42,496 @@ public class FrameBackpro extends javax.swing.JFrame {
     private void initComponents() {
 
         fileChooser = new javax.swing.JFileChooser();
+        jFrame1 = new javax.swing.JFrame();
+        jLabel7 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        hasilTable = new javax.swing.JTable();
+        jLabel8 = new javax.swing.JLabel();
+        errorTextField = new javax.swing.JTextField();
+        masukPengujianButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        dataLatihTable = new javax.swing.JTable();
+        dataLButton = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        inittJaringanButton = new javax.swing.JButton();
+        nPerLTextField = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        fungsiAktivasiComboBox = new javax.swing.JComboBox();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        maxEpohTextField = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        learningRTextField = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        targetErrorTextField = new javax.swing.JTextField();
+        latihButton = new javax.swing.JButton();
 
+        fileChooser.setCurrentDirectory(new java.io.File("C:\\Users\\ACER\\Documents\\NetBeansProjects\\LVQ_Backpro"));
         fileChooser.setDialogTitle("Pilih Data");
         fileChooser.setFileFilter(new MyCustomFilter());
 
+        jFrame1.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setText("Hasil Pelatihan");
+
+        hasilTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(hasilTable);
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel8.setText("Error");
+
+        errorTextField.setEditable(false);
+        errorTextField.setBackground(new java.awt.Color(255, 255, 255));
+
+        masukPengujianButton.setText("Masuk Pengujian");
+        masukPengujianButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                masukPengujianButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrame1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jFrame1Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(errorTextField))
+                    .addGroup(jFrame1Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(masukPengujianButton, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrame1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(errorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(masukPengujianButton)
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Backpropagation Pelatihan");
+        setPreferredSize(new java.awt.Dimension(1016, 666));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setText("Pelatihan Backpropagation");
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Latih", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+
+        dataLatihTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(dataLatihTable);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        dataLButton.setText("Pilih Data Latih");
+        dataLButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dataLButtonActionPerformed(evt);
+            }
+        });
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Inisialisasi Jaringan", javax.swing.border.TitledBorder.TRAILING, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial Rounded MT Bold", 1, 14))); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setText("Banyak Neuron per Hidden Layer ");
+
+        inittJaringanButton.setText("Inisialisasi");
+        inittJaringanButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inittJaringanButtonActionPerformed(evt);
+            }
+        });
+
+        nPerLTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nPerLTextFieldKeyTyped(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setText("Jenis Fungsi Aktivasi");
+
+        fungsiAktivasiComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Sigmoid biner", "Sigmoid bipolar" }));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fungsiAktivasiComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(inittJaringanButton, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(nPerLTextField)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel6))
+                        .addGap(0, 97, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nPerLTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fungsiAktivasiComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(inittJaringanButton)
+                .addContainerGap())
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pelatihan", javax.swing.border.TitledBorder.TRAILING, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial Rounded MT Bold", 1, 14))); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("Maksimum Epoh");
+
+        maxEpohTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                maxEpohTextFieldKeyTyped(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel4.setText("Learning Rate");
+
+        learningRTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                learningRTextFieldKeyTyped(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setText("Target Error RMSE");
+
+        targetErrorTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                targetErrorTextFieldKeyTyped(evt);
+            }
+        });
+
+        latihButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        latihButton.setForeground(new java.awt.Color(0, 204, 0));
+        latihButton.setText("Latih");
+        latihButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                latihButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(maxEpohTextField)
+                    .addComponent(learningRTextField)
+                    .addComponent(targetErrorTextField)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addGap(0, 188, Short.MAX_VALUE))
+                    .addComponent(latihButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(maxEpohTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(learningRTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(targetErrorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(latihButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(dataLButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(36, 36, 36)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(2, 2, 2)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(dataLButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(43, 43, 43))
         );
 
-        setSize(new java.awt.Dimension(416, 336));
+        setSize(new java.awt.Dimension(1016, 600));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void inittJaringanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inittJaringanButtonActionPerformed
+        // TODO add your handling code here:
+        try {
+            String data = nPerLTextField.getText();
+            String[] split = data.split("\\s+");
+            nPLayer = new int[split.length + 1];
+            for (int i = 0; i < nPLayer.length; i++) {
+                if (i == nPLayer.length - 1) {
+                    nPLayer[i] = 1;
+                } else {
+                    nPLayer[i] = Integer.parseInt(split[i]);
+                }
+
+            }
+            JOptionPane.showMessageDialog(new JFrame(), "Jaringan sukses dibuat.");
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+    }//GEN-LAST:event_inittJaringanButtonActionPerformed
+
+    private void dataLButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dataLButtonActionPerformed
+        // TODO add your handling code here:
+        int returnVal = fileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            excelFile = fileChooser.getSelectedFile();
+            dataLatih = new DataManagement();
+            try {
+                // Tampikan data
+                muatData(excelFile);
+                dataLatih.setInputFile(excelFile.toString());
+                dataLatih.read2();
+                dataLatih.normalisasi();
+                System.out.println("Max usia" + dataLatih.getDataTertinggi()[1]);
+                System.out.println("Min usia" + dataLatih.getDataTerendah()[1]);
+            } catch (Exception ex) {
+                System.out.println("Terdapat masalah dalam akses file " + excelFile.getAbsolutePath());
+                System.out.println(ex.getCause());
+            }
+        } else {
+            System.out.println("Akses file dibatalkan");
+        }
+
+    }//GEN-LAST:event_dataLButtonActionPerformed
+
+    private void nPerLTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nPerLTextFieldKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+
+        if (!(c == ' ')) {
+            if (!Character.isDigit(c)) {
+                System.out.println(true);
+                evt.consume();
+            }
+
+        }
+    }//GEN-LAST:event_nPerLTextFieldKeyTyped
+
+    private void maxEpohTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_maxEpohTextFieldKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+
+        if (!Character.isDigit(c)) {
+            System.out.println(true);
+            evt.consume();
+        }
+
+
+    }//GEN-LAST:event_maxEpohTextFieldKeyTyped
+
+    private void learningRTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_learningRTextFieldKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+
+        if (!(c == '.')) {
+            if (!Character.isDigit(c)) {
+                System.out.println(true);
+                evt.consume();
+            }
+
+        }
+    }//GEN-LAST:event_learningRTextFieldKeyTyped
+
+    private void targetErrorTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_targetErrorTextFieldKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+
+        if (!(c == '.')) {
+            if (!Character.isDigit(c)) {
+                System.out.println(true);
+                evt.consume();
+            }
+
+        }
+    }//GEN-LAST:event_targetErrorTextFieldKeyTyped
+
+    private void latihButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_latihButtonActionPerformed
+        // TODO add your handling code here:
+        System.out.println(nPLayer.length);
+        System.out.println(fungsiAktivasiComboBox.getSelectedIndex());
+        try {
+            backpro = new Backpropagation3(nPLayer, path);
+            int index = fungsiAktivasiComboBox.getSelectedIndex();
+            int maxEpoh = Integer.valueOf(maxEpohTextField.getText());
+            double learningR = Double.valueOf(learningRTextField.getText());
+            double targetError = Double.valueOf(targetErrorTextField.getText());
+            backpro.fungsiAktivasi = index;
+            backpro.train(dataLatih, maxEpoh, learningR, targetError);
+            hasilPelatihan();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+    }//GEN-LAST:event_latihButtonActionPerformed
+
+    private void hasilPelatihan() {
+        errorTextField.setText(backpro.logError.get(backpro.logError.size() - 1).toString());
+        TableModel model = new DefaultTableModel(backpro.logError.size(), 3);
+        for (int i = 0; i < model.getRowCount(); i++) {
+            model.setValueAt(i + 1, i, 0);
+            model.setValueAt(backpro.logRMSE.get(i), i, 1);
+            model.setValueAt(backpro.logError.get(i), i, 2);
+        }
+        hasilTable.setModel(model);
+        jFrame1.pack();
+        jFrame1.setVisible(true);
+    }
+
+    private void masukPengujianButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_masukPengujianButtonActionPerformed
+        // TODO add your handling code here:
+        backproUji = new FrameBackproUji();
+        backproUji.path = path;
+        backproUji.backpro = backpro;
+        backproUji.setVisible(true);
+    }//GEN-LAST:event_masukPengujianButtonActionPerformed
+
+    private void muatData(File file) {
+        File excelFile = file;
+
+        // buat model untuk file excel
+        if (excelFile.exists()) {
+            try {
+                Workbook workbook = Workbook.getWorkbook(excelFile);
+                Sheet sheet = workbook.getSheets()[0];
+
+                TableModel model = new DefaultTableModel(sheet.getRows(), sheet.getColumns());
+                for (int row = 0; row < sheet.getRows(); row++) {
+                    for (int column = 0; column < sheet.getColumns(); column++) {
+                        String content = sheet.getCell(column, row).getContents();
+                        model.setValueAt(content, row, column);
+                    }
+                }
+
+                dataLatihTable.setModel(model);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error: " + e);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "File does not exist");
+        }
+    }
 
     class MyCustomFilter extends javax.swing.filechooser.FileFilter {
 
@@ -105,8 +584,44 @@ public class FrameBackpro extends javax.swing.JFrame {
         });
     }
 
+    //Variables
+    public FrameDepan frDepan;
+    File excelFile = null;
+    String path;
+    DataManagement dataLatih;
+    Backpropagation3 backpro;
+    int[] nPLayer;
+    FrameBackproUji backproUji;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton dataLButton;
+    private javax.swing.JTable dataLatihTable;
+    private javax.swing.JTextField errorTextField;
     private javax.swing.JFileChooser fileChooser;
+    private javax.swing.JComboBox fungsiAktivasiComboBox;
+    private javax.swing.JTable hasilTable;
+    private javax.swing.JButton inittJaringanButton;
+    private javax.swing.JFrame jFrame1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton latihButton;
+    private javax.swing.JTextField learningRTextField;
+    private javax.swing.JButton masukPengujianButton;
+    private javax.swing.JTextField maxEpohTextField;
+    private javax.swing.JTextField nPerLTextField;
+    private javax.swing.JTextField targetErrorTextField;
     // End of variables declaration//GEN-END:variables
 
 }
