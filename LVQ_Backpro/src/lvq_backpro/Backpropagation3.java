@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 
 /**
  * BISMILLAHIRRAHMANIRRAHIIM
@@ -54,7 +55,8 @@ public class Backpropagation3 {
         for (int i = 0; i < bobot.size(); i++) {
             for (int j = 0; j < bobot.get(i).length; j++) {
                 for (int k = 0; k < bobot.get(i)[j].length; k++) {
-                    bobot.get(i)[j][k] = 0 + (0 + 1) * r.nextDouble();
+                    bobot.get(i)[j][k] = 0 + (0 + 0.5) * r.nextDouble();
+                    //bobot.get(i)[j][k] = 0.1;
                 }
 
             }
@@ -62,8 +64,7 @@ public class Backpropagation3 {
     }
 
     public void train(DataManagement d, int maxEpoh, double learningRate, double targetError) {
-        //Normalisasi Data
-        d.normalisasi();
+      
         //inisialisasi data latih
         double[][] dataLatih = new double[d.data.length - 1][d.namaAtribut.length];
         //System.out.println(dataLatih.length + "  " + dataLatih[0].length);
@@ -256,8 +257,7 @@ public class Backpropagation3 {
     }
 
     public void test(DataManagement d) {
-        //Normalisasi Data
-        d.normalisasi();
+       
         //inisialisasi data uji
         double[][] dataUji = new double[d.data.length - 1][d.namaAtribut.length];
         //System.out.println(dataLatih.length + "  " + dataLatih[0].length);
@@ -292,7 +292,7 @@ public class Backpropagation3 {
         for (int i = 0; i < dataUji.length; i++) {
             ArrayList<double[]> signalInPerNeuron = new ArrayList<>();
             ArrayList<double[]> signalOutPerNeuron = new ArrayList<>();
-            
+
 
             /*Langkah Maju*/
             for (int j = 0; j < bobot.size(); j++) {
@@ -338,10 +338,10 @@ public class Backpropagation3 {
                 //System.out.println("  " + signalInPerNeuron.size());
             }
             if (prediksi[i] != dataTarget[i]) {
-                 error++;
+                error++;
             }
         }
-        
+
         for (int i = 0; i < prediksi.length; i++) {
             System.out.println("nilai In = " + nilai[i]);
             System.out.println("Hasil Prediksi data-" + (i + 1) + " = " + prediksi[i]);
@@ -349,10 +349,9 @@ public class Backpropagation3 {
         }
         System.out.println("Error = " + error);
         this.error = error;
-        this.akurasi = (dataTarget.length - this.error)/dataTarget.length * 100;
+        this.akurasi = (dataTarget.length - this.error) / dataTarget.length * 100;
         System.out.println("Akurasi =" + akurasi);
         this.hasil[1] = prediksi;
-        
 
     }
 
@@ -413,20 +412,78 @@ public class Backpropagation3 {
         return hasil;
     }
 
+    public void tampilkanGrafikPelatihan(final String jenis) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                double[] epoh = new double[logError.size()];
+                double[] error = new double[logError.size()];
+
+                for (int i = 0; i < epoh.length; i++) {
+                    epoh[i] = i + 1;
+                    if (jenis == "RMSE") {
+                        error[i] = logRMSE.get(i);
+                    } else {
+                        error[i] = logError.get(i);
+                    }
+                }
+                double[][] data = new double[2][epoh.length];
+                data[0] = epoh;
+                data[1] = error;
+                LineChart.showChart("Grafik Pelatihan", data, "Grafik", "Epoh", jenis);
+            }
+        });
+    }
+
+    public void tampilkanGrafikPengujian() {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                double[] banyakData = new double[hasil.length];
+                for (int i = 0; i < banyakData.length; i++) {
+                    banyakData[i] = i + 1;
+
+                }
+
+                double[][] data = new double[2][banyakData.length];
+                data[0] = banyakData;
+                data[1] = hasil[0];
+                double[][] data2 = new double[2][banyakData.length];
+                data2[0] = banyakData;
+                data2[1] = hasil[1];
+                LineChart.showChart2Line("Grafik Hasil Pengujian", data, "Data Aktual", data2, "Prediksi", "n-Data", "Kelas");
+            }
+        });
+    }
+
+    public void printBobot() {
+        System.out.println("");
+        for (int i = 0; i < bobot.size(); i++) {
+            for (int j = 0; j < bobot.get(i).length; j++) {
+                System.out.println("------" + j);
+                for (int k = 0; k < bobot.get(i)[j].length; k++) {
+                    System.out.println(bobot.get(i)[j][k]);
+                }
+
+            }
+            System.out.println("");
+        }
+    }
+
     public static void main(String[] args) {
         //int[] nHnN = {5, 4, 1};
         int[] nHnN = {3, 1};
-        Backpropagation3 b = new Backpropagation3(nHnN, "DataLatih.xls");
+        Backpropagation3 b = new Backpropagation3(nHnN, "SemuaData.xls");
 
         DataManagement dataL = new DataManagement();
-        dataL.setInputFile("DataLatih2.xls");
+        dataL.setInputFile("SemuaData.xls");
         DataManagement dataUji = new DataManagement();
         //dataUji.setInputFile("DataUji2.xls");
-        dataUji.setInputFile("DataLatih2Copy.xls");
+        dataUji.setInputFile("SemuaDataCopy.xls");
 
         try {
             dataL.read2();
             dataUji.read2();
+            dataL.normalisasi();
+            dataUji.normalisasi();
         } catch (IOException ex) {
             Logger.getLogger(LVQ.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -444,14 +501,18 @@ public class Backpropagation3 {
         }
 
         //Pilih Fungsi Aktivasi
-        b.fungsiAktivasi = 1;
+        b.fungsiAktivasi = 0;
 
         //train
         b.train(dataL, 100, 0.5, 0.1);
+        b.tampilkanGrafikPelatihan("RMSE");
+        b.tampilkanGrafikPelatihan("Error");
 
         //b.train(b.d, 100, 0.5, 0.004);
         System.out.println("\nTesting");
         b.test(dataUji);
+        b.tampilkanGrafikPengujian();
+       // b.printBobot();
 
         //print jaringgan
 //        System.out.println("Bobot baru");

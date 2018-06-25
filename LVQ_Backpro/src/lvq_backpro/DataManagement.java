@@ -236,7 +236,10 @@ public class DataManagement {
     public void normalisasi() {
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[i].length - 1; j++) {
-                data[i][j] = (data[i][j] - dataTerendah[j]) / (dataTertinggi[j] - dataTerendah[j]);
+                //Normal Normalisasi (0,1)
+               data[i][j] = (data[i][j] - dataTerendah[j]) / (dataTertinggi[j] - dataTerendah[j]);
+                //Modif (0.1-0.9)
+               // data[i][j] = (data[i][j] - dataTerendah[j]) / (dataTertinggi[j] - dataTerendah[j]) * 0.8 + 0.1;
             }
         }
     }
@@ -248,8 +251,6 @@ public class DataManagement {
     public static double[] getDataTerendah() {
         return dataTerendah;
     }
-    
-    
 
     public static void main(String[] args) throws IOException, WriteException {
         DataManagement test = new DataManagement();
@@ -294,7 +295,7 @@ public class DataManagement {
 
             System.out.println();
         }
-        
+
         test.write();
         System.out.println("\n");
 
@@ -313,7 +314,6 @@ public class DataManagement {
             System.out.println();
         }
 
-        
         /* double[] d = test.sortingAtributKe(1);
          for (int i = 0; i < d.length; i++) {
          System.out.println(d[i]);

@@ -13,6 +13,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -49,6 +52,7 @@ public class FrameBackpro extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         errorTextField = new javax.swing.JTextField();
         masukPengujianButton = new javax.swing.JButton();
+        lihatGrafikButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
@@ -105,6 +109,13 @@ public class FrameBackpro extends javax.swing.JFrame {
             }
         });
 
+        lihatGrafikButton.setText("Lihat Grafik");
+        lihatGrafikButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lihatGrafikButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
         jFrame1Layout.setHorizontalGroup(
@@ -117,10 +128,11 @@ public class FrameBackpro extends javax.swing.JFrame {
                         .addComponent(jLabel8)
                         .addGap(18, 18, 18)
                         .addComponent(errorTextField))
+                    .addComponent(masukPengujianButton, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
                     .addGroup(jFrame1Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(masukPengujianButton, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))
+                    .addComponent(lihatGrafikButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jFrame1Layout.setVerticalGroup(
@@ -134,14 +146,15 @@ public class FrameBackpro extends javax.swing.JFrame {
                     .addComponent(errorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lihatGrafikButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(masukPengujianButton)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGap(32, 32, 32))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Backpropagation Pelatihan");
-        setPreferredSize(new java.awt.Dimension(1016, 666));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Pelatihan Backpropagation");
@@ -167,13 +180,13 @@ public class FrameBackpro extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 623, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -223,7 +236,7 @@ public class FrameBackpro extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel6))
-                        .addGap(0, 97, Short.MAX_VALUE)))
+                        .addGap(0, 89, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -265,6 +278,11 @@ public class FrameBackpro extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Target Error RMSE");
 
+        targetErrorTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                targetErrorTextFieldActionPerformed(evt);
+            }
+        });
         targetErrorTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 targetErrorTextFieldKeyTyped(evt);
@@ -295,7 +313,7 @@ public class FrameBackpro extends javax.swing.JFrame {
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5))
-                        .addGap(0, 188, Short.MAX_VALUE))
+                        .addGap(0, 180, Short.MAX_VALUE))
                     .addComponent(latihButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -380,7 +398,7 @@ public class FrameBackpro extends javax.swing.JFrame {
                 if (i == nPLayer.length - 1) {
                     nPLayer[i] = 1;
                 } else {
-                    nPLayer[i] = Integer.parseInt(split[i]);
+                    nPLayer[i] = Integer.valueOf(split[i]);
                 }
 
             }
@@ -472,12 +490,14 @@ public class FrameBackpro extends javax.swing.JFrame {
         System.out.println(fungsiAktivasiComboBox.getSelectedIndex());
         try {
             backpro = new Backpropagation3(nPLayer, path);
+            backpro.printBobot();
             int index = fungsiAktivasiComboBox.getSelectedIndex();
             int maxEpoh = Integer.valueOf(maxEpohTextField.getText());
             double learningR = Double.valueOf(learningRTextField.getText());
             double targetError = Double.valueOf(targetErrorTextField.getText());
             backpro.fungsiAktivasi = index;
             backpro.train(dataLatih, maxEpoh, learningR, targetError);
+            backpro.printBobot();
             hasilPelatihan();
         } catch (Exception ex) {
             System.out.println(ex);
@@ -494,6 +514,15 @@ public class FrameBackpro extends javax.swing.JFrame {
             model.setValueAt(backpro.logError.get(i), i, 2);
         }
         hasilTable.setModel(model);
+        JTableHeader th = hasilTable.getTableHeader();
+        TableColumnModel tcm = th.getColumnModel();
+        TableColumn tc = tcm.getColumn(0);
+        tc.setHeaderValue("Epoh");
+        tc = tcm.getColumn(1);
+        tc.setHeaderValue("RMSE");
+        tc = tcm.getColumn(2);
+        tc.setHeaderValue("Error");
+        th.repaint();
         jFrame1.pack();
         jFrame1.setVisible(true);
     }
@@ -506,8 +535,18 @@ public class FrameBackpro extends javax.swing.JFrame {
         backproUji.setVisible(true);
     }//GEN-LAST:event_masukPengujianButtonActionPerformed
 
+    private void lihatGrafikButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lihatGrafikButtonActionPerformed
+        // TODO add your handling code here:
+        backpro.tampilkanGrafikPelatihan("Error");
+        backpro.tampilkanGrafikPelatihan("RMSE");
+    }//GEN-LAST:event_lihatGrafikButtonActionPerformed
+
+    private void targetErrorTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_targetErrorTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_targetErrorTextFieldActionPerformed
+
     private void muatData(File file) {
-        File excelFile = file;
+          File excelFile = file;
 
         // buat model untuk file excel
         if (excelFile.exists()) {
@@ -515,15 +554,29 @@ public class FrameBackpro extends javax.swing.JFrame {
                 Workbook workbook = Workbook.getWorkbook(excelFile);
                 Sheet sheet = workbook.getSheets()[0];
 
-                TableModel model = new DefaultTableModel(sheet.getRows(), sheet.getColumns());
-                for (int row = 0; row < sheet.getRows(); row++) {
-                    for (int column = 0; column < sheet.getColumns(); column++) {
-                        String content = sheet.getCell(column, row).getContents();
+                TableModel model = new DefaultTableModel(sheet.getRows() - 1, sheet.getColumns());
+                for (int row = 0; row < model.getRowCount(); row++) {
+                    for (int column = 0; column < model.getColumnCount(); column++) {
+                        String content = sheet.getCell(column, row + 1).getContents();
                         model.setValueAt(content, row, column);
+                        
                     }
+                }
+                Object[] columnNames = new Object[sheet.getColumns()];
+                for (int i = 0; i < sheet.getColumns(); i++) {
+                    columnNames[i] = sheet.getCell(i, 0).getContents();
                 }
 
                 dataLatihTable.setModel(model);
+                JTableHeader th = dataLatihTable.getTableHeader();
+                TableColumnModel tcm = th.getColumnModel();
+                TableColumn tc;
+                for (int i = 0; i < tcm.getColumnCount(); i++) {
+                    tc = tcm.getColumn(i);
+                    tc.setHeaderValue(columnNames[i]);
+                }
+
+                th.repaint();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e);
             }
@@ -618,6 +671,7 @@ public class FrameBackpro extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton latihButton;
     private javax.swing.JTextField learningRTextField;
+    private javax.swing.JButton lihatGrafikButton;
     private javax.swing.JButton masukPengujianButton;
     private javax.swing.JTextField maxEpohTextField;
     private javax.swing.JTextField nPerLTextField;

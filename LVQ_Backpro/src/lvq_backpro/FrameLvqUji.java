@@ -10,6 +10,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -52,6 +55,7 @@ public class FrameLvqUji extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         errorTextField = new javax.swing.JTextField();
         akurasiTextField = new javax.swing.JTextField();
+        lihatGrafikButton = new javax.swing.JButton();
 
         fileChooser.setCurrentDirectory(new java.io.File("C:\\Users\\ACER\\Documents\\NetBeansProjects\\LVQ_Backpro"));
         fileChooser.setDialogTitle("Pilih Data Uji");
@@ -126,6 +130,13 @@ public class FrameLvqUji extends javax.swing.JFrame {
             }
         });
 
+        lihatGrafikButton.setText("Lihat Grafik");
+        lihatGrafikButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lihatGrafikButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -148,12 +159,17 @@ public class FrameLvqUji extends javax.swing.JFrame {
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(errorTextField)
-                                    .addComponent(akurasiTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(errorTextField)
+                                            .addComponent(akurasiTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(lihatGrafikButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(58, 58, 58)))
                 .addContainerGap())
         );
@@ -183,7 +199,10 @@ public class FrameLvqUji extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(akurasiTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(akurasiTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(lihatGrafikButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
                 .addGap(27, 27, 27))
         );
@@ -221,25 +240,27 @@ public class FrameLvqUji extends javax.swing.JFrame {
         try {
             //testing data
             lvq.test(dataUji);
-            TableModel model = new DefaultTableModel(lvq.hasil.length + 1, 3);
+            TableModel model = new DefaultTableModel(lvq.hasil.length, 3);
             for (int i = 0; i < model.getRowCount(); i++) {
                 for (int j = 0; j < model.getColumnCount(); j++) {
-                    if (i == 0) {
-                        model.setValueAt("No", i, 0);
-                        model.setValueAt("Data Aktual", i, 1);
-                        model.setValueAt("Hasil Prediksi", i, 2);
+                    if (j == 0) {
+                        model.setValueAt(i+1, i, 0);
                     } else {
-                        if (j == 0) {
-                            model.setValueAt(i, i, 0);
-                        } else {
-                            model.setValueAt(lvq.hasil[i - 1][j - 1], i, j);
-                        }
-
+                        model.setValueAt(lvq.hasil[i][j - 1], i, j);
                     }
 
                 }
             }
             hasilTable.setModel(model);
+            JTableHeader th = hasilTable.getTableHeader();
+            TableColumnModel tcm = th.getColumnModel();
+            TableColumn tc = tcm.getColumn(0);
+            tc.setHeaderValue("No");
+            tc = tcm.getColumn(1);
+            tc.setHeaderValue("Data Aktual");
+            tc = tcm.getColumn(2);
+            tc.setHeaderValue("Hasil Prediksi");
+            th.repaint();
             errorTextField.setText(String.valueOf(lvq.error));
             akurasiTextField.setText(String.valueOf(lvq.akurasi));
         } catch (Exception ex) {
@@ -247,8 +268,13 @@ public class FrameLvqUji extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_testButtonActionPerformed
 
+    private void lihatGrafikButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lihatGrafikButtonActionPerformed
+        // TODO add your handling code here:
+        lvq.tampilkanGrafikPengujian();
+    }//GEN-LAST:event_lihatGrafikButtonActionPerformed
+
     private void muatData(File file) {
-        File excelFile = file;
+         File excelFile = file;
 
         // buat model untuk file excel
         if (excelFile.exists()) {
@@ -256,15 +282,28 @@ public class FrameLvqUji extends javax.swing.JFrame {
                 Workbook workbook = Workbook.getWorkbook(excelFile);
                 Sheet sheet = workbook.getSheets()[0];
 
-                TableModel model = new DefaultTableModel(sheet.getRows(), sheet.getColumns());
-                for (int row = 0; row < sheet.getRows(); row++) {
-                    for (int column = 0; column < sheet.getColumns(); column++) {
-                        String content = sheet.getCell(column, row).getContents();
+                TableModel model = new DefaultTableModel(sheet.getRows() - 1, sheet.getColumns());
+                for (int row = 0; row < model.getRowCount(); row++) {
+                    for (int column = 0; column < model.getColumnCount(); column++) {
+                        String content = sheet.getCell(column, row + 1).getContents();
                         model.setValueAt(content, row, column);
                     }
                 }
+                Object[] columnNames = new Object[sheet.getColumns()];
+                for (int i = 0; i < sheet.getColumns(); i++) {
+                    columnNames[i] = sheet.getCell(i, 0).getContents();
+                }
 
                 dataUjiTable.setModel(model);
+                JTableHeader th = dataUjiTable.getTableHeader();
+                TableColumnModel tcm = th.getColumnModel();
+                TableColumn tc;
+                for (int i = 0; i < tcm.getColumnCount(); i++) {
+                    tc = tcm.getColumn(i);
+                    tc.setHeaderValue(columnNames[i]);
+                }
+
+                th.repaint();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e);
             }
@@ -329,6 +368,7 @@ public class FrameLvqUji extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JButton lihatGrafikButton;
     private javax.swing.JButton pilihDataButton;
     private javax.swing.JButton testButton;
     // End of variables declaration//GEN-END:variables

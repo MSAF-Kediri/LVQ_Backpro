@@ -10,6 +10,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -53,6 +56,7 @@ public class FrameBackproUji extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         errorTextField = new javax.swing.JTextField();
         akurasiTextField = new javax.swing.JTextField();
+        lihatGrafikButton = new javax.swing.JButton();
 
         fileChooser.setCurrentDirectory(new java.io.File("C:\\Users\\ACER\\Documents\\NetBeansProjects\\LVQ_Backpro"));
         fileChooser.setDialogTitle("Pilih Data Uji");
@@ -127,6 +131,13 @@ public class FrameBackproUji extends javax.swing.JFrame {
             }
         });
 
+        lihatGrafikButton.setText("Lihat Grafik");
+        lihatGrafikButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lihatGrafikButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -149,12 +160,17 @@ public class FrameBackproUji extends javax.swing.JFrame {
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(errorTextField)
-                                    .addComponent(akurasiTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(errorTextField)
+                                            .addComponent(akurasiTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(lihatGrafikButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(58, 58, 58)))
                 .addContainerGap())
         );
@@ -184,7 +200,10 @@ public class FrameBackproUji extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(akurasiTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(akurasiTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(lihatGrafikButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
                 .addGap(27, 27, 27))
         );
@@ -222,25 +241,36 @@ public class FrameBackproUji extends javax.swing.JFrame {
         try {
             //testing data
             backpro.test(dataUji);
-            TableModel model = new DefaultTableModel(backpro.hasil.length + 1, 3);
-            model.setValueAt("No", 0, 0);
-            model.setValueAt("Data Aktual", 0, 1);
-            model.setValueAt("Hasil Prediksi", 0, 2);
+            TableModel model = new DefaultTableModel(backpro.hasil.length, 3);
 
-            for (int j = 1; j < model.getRowCount(); j++) {
-                model.setValueAt(j, j, 0);
-                model.setValueAt(backpro.hasil[0][j-1], j, 1);
-                model.setValueAt(backpro.hasil[1][j-1], j, 2);
+            for (int j = 0; j < model.getRowCount(); j++) {
+                model.setValueAt(j+1, j, 0);
+                model.setValueAt(backpro.hasil[0][j], j, 1);
+                model.setValueAt(backpro.hasil[1][j], j, 2);
 
             }
 
             hasilTable.setModel(model);
+            JTableHeader th = hasilTable.getTableHeader();
+            TableColumnModel tcm = th.getColumnModel();
+            TableColumn tc = tcm.getColumn(0);
+            tc.setHeaderValue("No");
+            tc = tcm.getColumn(1);
+            tc.setHeaderValue("Data Aktual");
+            tc = tcm.getColumn(2);
+            tc.setHeaderValue("Hasil Prediksi");
+            th.repaint();
             errorTextField.setText(String.valueOf(backpro.error));
             akurasiTextField.setText(String.valueOf(backpro.akurasi));
         } catch (Exception ex) {
             System.out.println(ex);
         }
     }//GEN-LAST:event_testButtonActionPerformed
+
+    private void lihatGrafikButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lihatGrafikButtonActionPerformed
+        // TODO add your handling code here:
+        backpro.tampilkanGrafikPengujian();
+    }//GEN-LAST:event_lihatGrafikButtonActionPerformed
 
     private void muatData(File file) {
         File excelFile = file;
@@ -251,15 +281,28 @@ public class FrameBackproUji extends javax.swing.JFrame {
                 Workbook workbook = Workbook.getWorkbook(excelFile);
                 Sheet sheet = workbook.getSheets()[0];
 
-                TableModel model = new DefaultTableModel(sheet.getRows(), sheet.getColumns());
-                for (int row = 0; row < sheet.getRows(); row++) {
-                    for (int column = 0; column < sheet.getColumns(); column++) {
-                        String content = sheet.getCell(column, row).getContents();
+                TableModel model = new DefaultTableModel(sheet.getRows() - 1, sheet.getColumns());
+                for (int row = 0; row < model.getRowCount(); row++) {
+                    for (int column = 0; column < model.getColumnCount(); column++) {
+                        String content = sheet.getCell(column, row + 1).getContents();
                         model.setValueAt(content, row, column);
                     }
                 }
+                Object[] columnNames = new Object[sheet.getColumns()];
+                for (int i = 0; i < sheet.getColumns(); i++) {
+                    columnNames[i] = sheet.getCell(i, 0).getContents();
+                }
 
                 dataUjiTable.setModel(model);
+                JTableHeader th = dataUjiTable.getTableHeader();
+                TableColumnModel tcm = th.getColumnModel();
+                TableColumn tc;
+                for (int i = 0; i < tcm.getColumnCount(); i++) {
+                    tc = tcm.getColumn(i);
+                    tc.setHeaderValue(columnNames[i]);
+                }
+
+                th.repaint();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e);
             }
@@ -324,6 +367,7 @@ public class FrameBackproUji extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JButton lihatGrafikButton;
     private javax.swing.JButton pilihDataButton;
     private javax.swing.JButton testButton;
     // End of variables declaration//GEN-END:variables

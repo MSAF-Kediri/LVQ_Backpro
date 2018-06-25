@@ -15,6 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -34,7 +37,7 @@ public class FrameData extends javax.swing.JFrame {
         initComponents();
         //fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
         fileChooser.setFileFilter(new FileNameExtensionFilter("MS Excel Documents(*.xls, *.xlsx)", "xls", "xlsx"));
-        
+
     }
 
     /**
@@ -104,9 +107,9 @@ public class FrameData extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(pilihData)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(okBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                .addComponent(okBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -166,15 +169,28 @@ public class FrameData extends javax.swing.JFrame {
                 Workbook workbook = Workbook.getWorkbook(excelFile);
                 Sheet sheet = workbook.getSheets()[0];
 
-                TableModel model = new DefaultTableModel(sheet.getRows(), sheet.getColumns());
-                for (int row = 0; row < sheet.getRows(); row++) {
-                    for (int column = 0; column < sheet.getColumns(); column++) {
-                        String content = sheet.getCell(column, row).getContents();
+                TableModel model = new DefaultTableModel(sheet.getRows() - 1, sheet.getColumns());
+                for (int row = 0; row < model.getRowCount(); row++) {
+                    for (int column = 0; column < model.getColumnCount(); column++) {
+                        String content = sheet.getCell(column, row + 1).getContents();
                         model.setValueAt(content, row, column);
                     }
                 }
+                Object[] columnNames = new Object[sheet.getColumns()];
+                for (int i = 0; i < sheet.getColumns(); i++) {
+                    columnNames[i] = sheet.getCell(i, 0).getContents();
+                }
 
                 table.setModel(model);
+                JTableHeader th = table.getTableHeader();
+                TableColumnModel tcm = th.getColumnModel();
+                TableColumn tc;
+                for (int i = 0; i < tcm.getColumnCount(); i++) {
+                    tc = tcm.getColumn(i);
+                    tc.setHeaderValue(columnNames[i]);
+                }
+
+                th.repaint();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error: " + e);
             }
