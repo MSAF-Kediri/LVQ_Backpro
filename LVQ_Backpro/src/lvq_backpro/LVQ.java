@@ -37,7 +37,6 @@ public class LVQ {
             int banyakKlas = (int) d.getDataTertinggi()[d.data[0].length - 1] + 1;
             // System.out.println(banyakFitur + " " + banyakKlas);
             bobot = new double[banyakKlas][banyakFitur];
-//            inisialisasiBobotAwal();
 
         } catch (IOException ex) {
             Logger.getLogger(LVQ.class.getName()).log(Level.SEVERE, null, ex);
@@ -57,7 +56,7 @@ public class LVQ {
             if (i == dataLatih.data[random][dataLatih.namaAtribut.length - 1]) {
                 for (int j = 0; j < dataLatih.data[random].length - 1; j++) {
                     bobot[i][j] = dataLatih.data[random][j];
-
+//                    bobot[i][j] = 0 + (0 + 0.5) * r.nextDouble();
                 }
                 i++;
             }
@@ -85,10 +84,10 @@ public class LVQ {
         logErrorPelatihan = new ArrayList<>();
 
         /*Proses Pelatihan*/
-        int error;
+        int error = 1;
         double[] jarakThdKlas = new double[(int) d.getDataTertinggi()[d.namaAtribut.length - 1] + 1];
         int epoh = 0;
-        while (epoh < maxEpoh && learningRate > minLearningRate) {
+        while (epoh < maxEpoh && learningRate > minLearningRate && error != 0) {
             error = 0;
             for (int i = 0; i < dataLatih.length; i++) {
                 for (int j = 0; j < jarakThdKlas.length; j++) {

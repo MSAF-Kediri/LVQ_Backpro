@@ -5,6 +5,7 @@
  */
 package lvq_backpro;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -13,6 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -38,9 +40,11 @@ public class FrameLvq extends javax.swing.JFrame {
     public FrameLvq() {
         initComponents();
         fileChooser.setFileFilter(new FileNameExtensionFilter("MS Excel Documents(*.xls, *.xlsx)", "xls", "xlsx"));
-        progressBar.setVisible(false);
-        path = FrameDepan.path;
 
+        path = FrameDepan.path;
+        ImageIcon icon = new ImageIcon(getClass().getResource("/lvq_backpro/neural.png"));
+        setIconImage(icon.getImage());
+        jFrame1.setIconImage(icon.getImage());
     }
 
     /**
@@ -73,12 +77,12 @@ public class FrameLvq extends javax.swing.JFrame {
         pilihDLatihButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         dataLatihTable = new javax.swing.JTable();
-        trainButton = new javax.swing.JButton();
+        latihButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
-        progressBar = new javax.swing.JProgressBar();
+        waktuPelatihanLabel = new javax.swing.JLabel();
 
         fileChooser.setCurrentDirectory(new java.io.File("C:\\Users\\ACER\\Documents\\NetBeansProjects\\LVQ_Backpro"));
         fileChooser.setDialogTitle("Pilih Data");
@@ -234,12 +238,12 @@ public class FrameLvq extends javax.swing.JFrame {
         dataLatihTable.setEnabled(false);
         jScrollPane1.setViewportView(dataLatihTable);
 
-        trainButton.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        trainButton.setForeground(new java.awt.Color(51, 255, 51));
-        trainButton.setText("Latih");
-        trainButton.addActionListener(new java.awt.event.ActionListener() {
+        latihButton.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        latihButton.setForeground(new java.awt.Color(51, 255, 51));
+        latihButton.setText("Latih");
+        latihButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                trainButtonActionPerformed(evt);
+                latihButtonActionPerformed(evt);
             }
         });
 
@@ -263,8 +267,11 @@ public class FrameLvq extends javax.swing.JFrame {
                         .addComponent(pilihDLatihButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator1)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(waktuPelatihanLabel))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(29, 29, 29)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,10 +285,11 @@ public class FrameLvq extends javax.swing.JFrame {
                                     .addComponent(decLearningRtTextField, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(learningRateTextField, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(epohTextField, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(minLearningRtTextField)))
-                            .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(33, 33, 33))
-                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(minLearningRtTextField)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(latihButton, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(33, 33, 33)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -311,24 +319,26 @@ public class FrameLvq extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(decLearningRtTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(minLearningRtTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(trainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                    .addComponent(minLearningRtTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(latihButton, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(waktuPelatihanLabel)
+                .addGap(23, 23, 23)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(18, 18, 18))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel3, jLabel4});
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {decLearningRtTextField, epohTextField, learningRateTextField, minLearningRtTextField});
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, jLabel3, jLabel4, jLabel5});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, jLabel5});
 
-        setSize(new java.awt.Dimension(756, 695));
+        setSize(new java.awt.Dimension(756, 683));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -357,22 +367,30 @@ public class FrameLvq extends javax.swing.JFrame {
 
     }//GEN-LAST:event_pilihDLatihButtonActionPerformed
 
-    private void trainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trainButtonActionPerformed
+    private void latihButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_latihButtonActionPerformed
         try {
             lvq = new LVQ(path);
-            progressBar.setValue(0);
+
             int banyakEpoh = Integer.valueOf(epohTextField.getText());
             double learningR = Double.valueOf(learningRateTextField.getText());
             double decLearningR = Double.valueOf(decLearningRtTextField.getText());
             double minLearningR = Double.valueOf(minLearningRtTextField.getText());
+            LoaderProcess loader = new LoaderProcess(this);
+            loader.execute();
             lvq.train(dataLatih, banyakEpoh, learningR, decLearningR, minLearningR);
-
+            loader.done();
+            waktuPelatihanLabel.setText(String.valueOf(loader.lamaWaktu) + " detik");
+            waktuPelatihanLabel.setForeground(Color.GREEN);
             hasilPelatihan();
 
         } catch (Exception ex) {
-
+            System.out.println(ex);
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Harap di cek lagi .... !",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_trainButtonActionPerformed
+    }//GEN-LAST:event_latihButtonActionPerformed
 
     private void epohTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_epohTextFieldActionPerformed
         // TODO add your handling code here:
@@ -443,7 +461,7 @@ public class FrameLvq extends javax.swing.JFrame {
     }//GEN-LAST:event_lihatGrafikButtonActionPerformed
 
     private void muatData(File file) {
-         File excelFile = file;
+        File excelFile = file;
 
         // buat model untuk file excel
         if (excelFile.exists()) {
@@ -543,8 +561,7 @@ public class FrameLvq extends javax.swing.JFrame {
     String path;
     DataManagement dataLatih;
     FrameLvqUji lvqUji;
-    Timer timer;
-    ActionListener action;
+   
     public FrameDepan frDepan;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -568,13 +585,13 @@ public class FrameLvq extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JButton latihButton;
     private javax.swing.JTextField learningRateTextField;
     private javax.swing.JButton lihatGrafikButton;
     private javax.swing.JButton masukPengujianButton;
     private javax.swing.JTextField minLearningRtTextField;
     private javax.swing.JButton pilihDLatihButton;
-    private javax.swing.JProgressBar progressBar;
-    private javax.swing.JButton trainButton;
+    private javax.swing.JLabel waktuPelatihanLabel;
     // End of variables declaration//GEN-END:variables
 
 }

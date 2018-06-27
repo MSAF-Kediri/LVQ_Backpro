@@ -64,7 +64,7 @@ public class Backpropagation3 {
     }
 
     public void train(DataManagement d, int maxEpoh, double learningRate, double targetError) {
-      
+
         //inisialisasi data latih
         double[][] dataLatih = new double[d.data.length - 1][d.namaAtribut.length];
         //System.out.println(dataLatih.length + "  " + dataLatih[0].length);
@@ -186,7 +186,11 @@ public class Backpropagation3 {
                                 error = e * e;
 
                                 infError[k] = e * fungsiTurunan(signalInPerNeuron.get(j)[k], 10);
-                                korBot[l] = learningRate * infError[k] * signalOutPerNeuron.get(j - 1)[l];
+                                if (banyakLDanNeuron.length == 1) {
+                                    korBot[l] = learningRate * infError[k] * dataLatih[i][l];
+                                } else {
+                                    korBot[l] = learningRate * infError[k] * signalOutPerNeuron.get(j - 1)[l];
+                                }
 
 //                                System.out.println("Error :" + e);
 //                                System.out.println(k + " :" + infError[k]);
@@ -257,7 +261,7 @@ public class Backpropagation3 {
     }
 
     public void test(DataManagement d) {
-       
+
         //inisialisasi data uji
         double[][] dataUji = new double[d.data.length - 1][d.namaAtribut.length];
         //System.out.println(dataLatih.length + "  " + dataLatih[0].length);
@@ -470,7 +474,7 @@ public class Backpropagation3 {
 
     public static void main(String[] args) {
         //int[] nHnN = {5, 4, 1};
-        int[] nHnN = {3, 1};
+        int[] nHnN = {11,11};
         Backpropagation3 b = new Backpropagation3(nHnN, "SemuaData.xls");
 
         DataManagement dataL = new DataManagement();

@@ -7,6 +7,7 @@ package lvq_backpro;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /**
@@ -21,7 +22,7 @@ public class Main {
     public static void main(String[] args) {
         // TODO code application logic here
         System.out.println("Bismillah . . .");
-
+        new Bismillah().setVisible(true);
         for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
             if ("Windows".equals(info.getName())) {
                 try {
@@ -38,11 +39,7 @@ public class Main {
             }
         }
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrameDepan().setVisible(true);
-            }
-        });
+      
     }
 
 }

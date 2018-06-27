@@ -254,18 +254,21 @@ public class DataManagement {
 
     public static void main(String[] args) throws IOException, WriteException {
         DataManagement test = new DataManagement();
-        test.setInputFile("C:\\Users\\ACER\\Documents\\NetBeansProjects\\LVQ_Backpro\\DataLatih.xls");
+        DataManagement test2 = new DataManagement();
+        test.setInputFile("C:\\Users\\ACER\\Documents\\NetBeansProjects\\LVQ_Backpro\\DataMaxMin.xls");
+        test2.setInputFile("DataLatih.xls");
         test.setOutputFile("Data Ternormalisasi.xls");
         test.read();
+        test2.read2();
 
-        for (String namaAtribut : test.namaAtribut) {
+        for (String namaAtribut : test2.namaAtribut) {
             System.out.format("%-24s", namaAtribut);
         }
         System.out.println();
 
-        for (int i = 1; i < test.data.length; i++) {
-            for (int j = 0; j < test.data[i].length; j++) {
-                System.out.format("%-24.3f", test.data[i][j]);
+        for (int i = 1; i < test2.data.length; i++) {
+            for (int j = 0; j < test2.data[i].length; j++) {
+                System.out.format("%-24.3f", test2.data[i][j]);
             }
 
             System.out.println();
@@ -281,34 +284,34 @@ public class DataManagement {
         }
         System.out.println("\n");
 
-        test.normalisasi();
+        test2.normalisasi();
         System.out.println("Data Ternormalisasi");
-        for (String namaAtribut : test.namaAtribut) {
+        for (String namaAtribut : test2.namaAtribut) {
             System.out.format("%-24s", namaAtribut);
         }
         System.out.println();
 
-        for (int i = 1; i < test.data.length; i++) {
-            for (int j = 0; j < test.data[i].length; j++) {
-                System.out.format("%-24.3f", test.data[i][j]);
+        for (int i = 1; i < test2.data.length; i++) {
+            for (int j = 0; j < test2.data[i].length; j++) {
+                System.out.format("%-24.3f", test2.data[i][j]);
             }
 
             System.out.println();
         }
 
-        test.write();
+        //test.write();
         System.out.println("\n");
 
-        test.normalisasi();
+        test2.normalisasi();
         System.out.println("Data Ternormalisasi 2");
-        for (String namaAtribut : test.namaAtribut) {
+        for (String namaAtribut : test2.namaAtribut) {
             System.out.format("%-24s", namaAtribut);
         }
         System.out.println();
 
-        for (int i = 1; i < test.data.length; i++) {
-            for (int j = 0; j < test.data[i].length; j++) {
-                System.out.format("%-24.3f", test.data[i][j]);
+        for (int i = 1; i < test2.data.length; i++) {
+            for (int j = 0; j < test2.data[i].length; j++) {
+                System.out.format("%-24.3f", test2.data[i][j]);
             }
 
             System.out.println();

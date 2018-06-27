@@ -6,7 +6,9 @@
 package lvq_backpro;
 
 import java.io.File;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -29,6 +31,9 @@ public class FrameLvqUji extends javax.swing.JFrame {
     public FrameLvqUji() {
         initComponents();
         fileChooser.setFileFilter(new FileNameExtensionFilter("MS Excel Documents(*.xls, *.xlsx)", "xls", "xlsx"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/lvq_backpro/neural.png"));
+        setIconImage(icon.getImage());
+        lihatGrafikButton.setVisible(false);
     }
 
     /**
@@ -244,9 +249,14 @@ public class FrameLvqUji extends javax.swing.JFrame {
             for (int i = 0; i < model.getRowCount(); i++) {
                 for (int j = 0; j < model.getColumnCount(); j++) {
                     if (j == 0) {
-                        model.setValueAt(i+1, i, 0);
+                        model.setValueAt(i + 1, i, 0);
                     } else {
-                        model.setValueAt(lvq.hasil[i][j - 1], i, j);
+                        if (lvq.hasil[i][0] == lvq.hasil[i][1]) {
+                            model.setValueAt(lvq.hasil[i][j - 1], i, j);
+                        }else {
+                            model.setValueAt(lvq.hasil[i][j - 1] + "***", i, j);
+                        }
+                        
                     }
 
                 }
@@ -263,8 +273,13 @@ public class FrameLvqUji extends javax.swing.JFrame {
             th.repaint();
             errorTextField.setText(String.valueOf(lvq.error));
             akurasiTextField.setText(String.valueOf(lvq.akurasi));
+            lihatGrafikButton.setVisible(true);
         } catch (Exception ex) {
             System.out.println(ex);
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Harap di cek lagi .... !",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_testButtonActionPerformed
 
@@ -274,7 +289,7 @@ public class FrameLvqUji extends javax.swing.JFrame {
     }//GEN-LAST:event_lihatGrafikButtonActionPerformed
 
     private void muatData(File file) {
-         File excelFile = file;
+        File excelFile = file;
 
         // buat model untuk file excel
         if (excelFile.exists()) {

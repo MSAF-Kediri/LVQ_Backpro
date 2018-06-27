@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -37,6 +38,11 @@ public class FrameData extends javax.swing.JFrame {
         initComponents();
         //fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
         fileChooser.setFileFilter(new FileNameExtensionFilter("MS Excel Documents(*.xls, *.xlsx)", "xls", "xlsx"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/lvq_backpro/neural.png"));
+        setIconImage(icon.getImage());
+        if (excelFile != null) {
+            muatData(excelFile);
+        }
 
     }
 
@@ -128,6 +134,10 @@ public class FrameData extends javax.swing.JFrame {
 
             } catch (Exception ex) {
                 System.out.println("Terdapat masalah dalam akses file " + excelFile.getAbsolutePath());
+                JOptionPane.showMessageDialog(new JFrame(),
+                    "Terdapat masalah dalam akses file",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             }
         } else {
             System.out.println("Akses file dibatalkan");
@@ -153,6 +163,10 @@ public class FrameData extends javax.swing.JFrame {
                 FrameDepan.data.read();
             } catch (IOException ex) {
                 Logger.getLogger(FrameData.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(new JFrame(),
+                    "Harap di cek lagi .... !",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             }
             this.dispose();
         }
@@ -202,7 +216,7 @@ public class FrameData extends javax.swing.JFrame {
 
     //variables
     public FrameDepan frDepan = null;
-    File excelFile = null;
+    static File excelFile = null;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileChooser;

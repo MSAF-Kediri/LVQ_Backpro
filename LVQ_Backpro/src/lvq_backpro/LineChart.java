@@ -11,6 +11,7 @@ package lvq_backpro;
  * @author MSAF
  */
 import java.util.HashSet;
+import javax.swing.ImageIcon;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -63,7 +64,8 @@ public class LineChart {
 
     public static void showChart(String title, double[][] data, String lineName, String xName, String yName) {
         JFrame frame = new JFrame(title);
-
+        ImageIcon icon = new ImageIcon("C:\\Users\\ACER\\Documents\\NetBeansProjects\\LVQ_Backpro\\src\\lvq_backpro\\neural.png");
+        frame.setIconImage(icon.getImage());
         frame.setSize(600, 400);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
@@ -82,7 +84,8 @@ public class LineChart {
             double[][] data2, String lineName2, String xName, String yName
     ) {
         JFrame frame = new JFrame(title);
-
+        ImageIcon icon = new ImageIcon("C:\\Users\\ACER\\Documents\\NetBeansProjects\\LVQ_Backpro\\src\\lvq_backpro\\neural.png");
+        frame.setIconImage(icon.getImage());
         frame.setSize(600, 400);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);

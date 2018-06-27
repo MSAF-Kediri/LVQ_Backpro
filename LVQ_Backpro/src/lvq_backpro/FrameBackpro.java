@@ -5,9 +5,12 @@
  */
 package lvq_backpro;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -33,6 +36,9 @@ public class FrameBackpro extends javax.swing.JFrame {
         initComponents();
         fileChooser.setFileFilter(new FileNameExtensionFilter("MS Excel Documents(*.xls, *.xlsx)", "xls", "xlsx"));
         path = FrameDepan.path;
+          ImageIcon icon = new ImageIcon(getClass().getResource("/lvq_backpro/neural.png"));
+        setIconImage(icon.getImage());
+        jFrame1.setIconImage(icon.getImage());
     }
 
     /**
@@ -73,6 +79,7 @@ public class FrameBackpro extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         targetErrorTextField = new javax.swing.JTextField();
         latihButton = new javax.swing.JButton();
+        waktuPelatihanLabel = new javax.swing.JLabel();
 
         fileChooser.setCurrentDirectory(new java.io.File("C:\\Users\\ACER\\Documents\\NetBeansProjects\\LVQ_Backpro"));
         fileChooser.setDialogTitle("Pilih Data");
@@ -97,7 +104,7 @@ public class FrameBackpro extends javax.swing.JFrame {
         jScrollPane2.setViewportView(hasilTable);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel8.setText("Error");
+        jLabel8.setText("RMSE");
 
         errorTextField.setEditable(false);
         errorTextField.setBackground(new java.awt.Color(255, 255, 255));
@@ -205,7 +212,7 @@ public class FrameBackpro extends javax.swing.JFrame {
         inittJaringanButton.setText("Inisialisasi");
         inittJaringanButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inittJaringanButtonActionPerformed(evt);
+                initJaringanButtonActionPerformed(evt);
             }
         });
 
@@ -314,7 +321,10 @@ public class FrameBackpro extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(jLabel5))
                         .addGap(0, 180, Short.MAX_VALUE))
-                    .addComponent(latihButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(latihButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(waktuPelatihanLabel)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -333,6 +343,8 @@ public class FrameBackpro extends javax.swing.JFrame {
                 .addComponent(targetErrorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(latihButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(waktuPelatihanLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -388,7 +400,7 @@ public class FrameBackpro extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void inittJaringanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inittJaringanButtonActionPerformed
+    private void initJaringanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_initJaringanButtonActionPerformed
         // TODO add your handling code here:
         try {
             String data = nPerLTextField.getText();
@@ -405,9 +417,13 @@ public class FrameBackpro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(new JFrame(), "Jaringan sukses dibuat.");
         } catch (Exception ex) {
             System.out.println(ex);
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Harap di cek lagi .... !",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
 
-    }//GEN-LAST:event_inittJaringanButtonActionPerformed
+    }//GEN-LAST:event_initJaringanButtonActionPerformed
 
     private void dataLButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dataLButtonActionPerformed
         // TODO add your handling code here:
@@ -486,9 +502,9 @@ public class FrameBackpro extends javax.swing.JFrame {
 
     private void latihButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_latihButtonActionPerformed
         // TODO add your handling code here:
-        System.out.println(nPLayer.length);
-        System.out.println(fungsiAktivasiComboBox.getSelectedIndex());
         try {
+            System.out.println(nPLayer.length);
+            System.out.println(fungsiAktivasiComboBox.getSelectedIndex());
             backpro = new Backpropagation3(nPLayer, path);
             backpro.printBobot();
             int index = fungsiAktivasiComboBox.getSelectedIndex();
@@ -496,17 +512,28 @@ public class FrameBackpro extends javax.swing.JFrame {
             double learningR = Double.valueOf(learningRTextField.getText());
             double targetError = Double.valueOf(targetErrorTextField.getText());
             backpro.fungsiAktivasi = index;
+            LoaderProcess loader = new LoaderProcess(this);
+            loader.execute();
             backpro.train(dataLatih, maxEpoh, learningR, targetError);
-            backpro.printBobot();
+            loader.done();
+            //backpro.printBobot();
+            //System.out.println(loader.hitungWaktu+" detik dari Frame");
+            waktuPelatihanLabel.setText(String.valueOf(loader.lamaWaktu) + " detik");
+            waktuPelatihanLabel.setForeground(Color.GREEN);
             hasilPelatihan();
         } catch (Exception ex) {
-            System.out.println(ex);
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Harap di cek lagi .... !",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            System.out.println(ex.getCause());
+
         }
 
     }//GEN-LAST:event_latihButtonActionPerformed
 
     private void hasilPelatihan() {
-        errorTextField.setText(backpro.logError.get(backpro.logError.size() - 1).toString());
+        errorTextField.setText(backpro.logRMSE.get(backpro.logRMSE.size() - 1).toString());
         TableModel model = new DefaultTableModel(backpro.logError.size(), 3);
         for (int i = 0; i < model.getRowCount(); i++) {
             model.setValueAt(i + 1, i, 0);
@@ -546,7 +573,7 @@ public class FrameBackpro extends javax.swing.JFrame {
     }//GEN-LAST:event_targetErrorTextFieldActionPerformed
 
     private void muatData(File file) {
-          File excelFile = file;
+        File excelFile = file;
 
         // buat model untuk file excel
         if (excelFile.exists()) {
@@ -559,7 +586,7 @@ public class FrameBackpro extends javax.swing.JFrame {
                     for (int column = 0; column < model.getColumnCount(); column++) {
                         String content = sheet.getCell(column, row + 1).getContents();
                         model.setValueAt(content, row, column);
-                        
+
                     }
                 }
                 Object[] columnNames = new Object[sheet.getColumns()];
@@ -676,6 +703,7 @@ public class FrameBackpro extends javax.swing.JFrame {
     private javax.swing.JTextField maxEpohTextField;
     private javax.swing.JTextField nPerLTextField;
     private javax.swing.JTextField targetErrorTextField;
+    private javax.swing.JLabel waktuPelatihanLabel;
     // End of variables declaration//GEN-END:variables
 
 }

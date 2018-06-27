@@ -6,7 +6,9 @@
 package lvq_backpro;
 
 import java.io.File;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -30,6 +32,9 @@ public class FrameBackproUji extends javax.swing.JFrame {
     public FrameBackproUji() {
         initComponents();
         fileChooser.setFileFilter(new FileNameExtensionFilter("MS Excel Documents(*.xls, *.xlsx)", "xls", "xlsx"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/lvq_backpro/neural.png"));
+        setIconImage(icon.getImage());
+        lihatGrafikButton.setVisible(false);
     }
 
     /**
@@ -244,9 +249,13 @@ public class FrameBackproUji extends javax.swing.JFrame {
             TableModel model = new DefaultTableModel(backpro.hasil.length, 3);
 
             for (int j = 0; j < model.getRowCount(); j++) {
-                model.setValueAt(j+1, j, 0);
+                model.setValueAt(j + 1, j, 0);
                 model.setValueAt(backpro.hasil[0][j], j, 1);
                 model.setValueAt(backpro.hasil[1][j], j, 2);
+                if (backpro.hasil[0][j] != backpro.hasil[1][j]) {
+                    model.setValueAt(backpro.hasil[0][j] + "***", j, 1);
+                    model.setValueAt(backpro.hasil[1][j] + "***", j, 2);
+                }
 
             }
 
@@ -262,8 +271,13 @@ public class FrameBackproUji extends javax.swing.JFrame {
             th.repaint();
             errorTextField.setText(String.valueOf(backpro.error));
             akurasiTextField.setText(String.valueOf(backpro.akurasi));
+            lihatGrafikButton.setVisible(true);
         } catch (Exception ex) {
             System.out.println(ex);
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Harap di cek lagi .... !",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_testButtonActionPerformed
 
